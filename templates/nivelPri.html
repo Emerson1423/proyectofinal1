@@ -104,88 +104,75 @@
     {% include 'footer.html' %}
     
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('camera-feed');
             const videoContainer = document.getElementById('video-container');
-            const cameraFeed = document.getElementById('camera-feed');
-            const button = document.getElementById('camera-toggle');
+            const toggleButton = document.getElementById('camera-toggle');
+            const letraSpan = document.getElementById('letra');
+            const respuestaSpan = document.getElementById('respuesta');
 
-            // Verifica si la cámara está activa al cargar la página
-            const cameraState = sessionStorage.getItem('cameraState'); // Leemos el estado desde sessionStorage
+            let cameraStream = null;
 
-            if (cameraState === 'active') {
-                // Si la cámara estaba activada, muestra el video y ajusta el botón
-                cameraFeed.src = '/video';
-                button.className = 'btn btn-danger';
-                button.innerText = 'Cerrar';
-                videoContainer.style.display = 'block'; // Muestra el contenedor de video
-            } else {
-                // Si la cámara estaba desactivada o no hay estado guardado
-                cameraFeed.src = ''; 
-                button.className = 'btn btn-success';
-                button.innerText = 'Iniciar';
-                videoContainer.style.display = 'none'; // Oculta el contenedor de video
-            }
-        });
-
-        async function toggleCamera() {
-            const button = document.getElementById('camera-toggle');
-            const cameraFeed = document.getElementById('camera-feed');
-            const videoContainer = document.getElementById('video-container');
-            button.disabled = true;
-
-            try {
-                const response = await fetch('/toggle_camera', { method: 'POST' });
-                const data = await response.json();
-
-                if (data.camera_active) {
-                    // Cámara activada
-                    cameraFeed.src = '/video'; // Establece la fuente del video
-                    button.className = 'btn btn-danger';
-                    button.innerText = 'Cerrar';
-                    videoContainer.style.display = 'block'; // Muestra el contenedor de video
-                    sessionStorage.setItem('cameraState', 'active'); // Guarda el estado de la cámara
+            // Alternar la cámara
+            toggleButton.addEventListener('click', async () => {
+                if (cameraStream) {
+                    // Apagar cámara
+                    cameraStream.getTracks().forEach(track => track.stop());
+                    video.srcObject = null;
+                    cameraStream = null;
+                    toggleButton.innerText = 'Iniciar';
+                    videoContainer.style.display = 'none';
                 } else {
-                    // Cámara desactivada
-                    cameraFeed.src = ''; // No muestra la imagen
-                    button.className = 'btn btn-success';
-                    button.innerText = 'Iniciar';
-                    videoContainer.style.display = 'none'; // Oculta el contenedor de video
-                    sessionStorage.removeItem('cameraState'); // Elimina el estado de la cámara
+                    try {
+                        // Encender cámara
+                        cameraStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                        video.srcObject = cameraStream;
+                        video.play();
+                        toggleButton.innerText = 'Cerrar';
+                        videoContainer.style.display = 'block';
+                        iniciarProcesamiento(video);
+                    } catch (error) {
+                        console.error('Error al acceder a la cámara:', error);
+                    }
                 }
-            } catch (error) {
-                console.error("Error al alternar la cámara:", error);
-            } finally {
-                button.disabled = false;
-            }
-        }
+            });
 
-        // Evento para apagar la cámara al salir de la página
-        window.addEventListener('beforeunload', async () => {
-            try {
-                await fetch('/toggle_camera_off', { method: 'POST' });
-                sessionStorage.removeItem('cameraState'); // Elimina el estado de la cámara al salir
-            } catch (error) {
-                console.error("Error al apagar la cámara automáticamente:", error);
+            async function enviarFrame(video) {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg'));
+                const formData = new FormData();
+                formData.append('frame', blob);
+
+                const response = await fetch('/procesar_frame', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const data = await response.json();
+                console.log('Letra detectada:', data.letra_detectada);
+                console.log('Respuesta:', data.respuesta);
+
+                letraSpan.innerText = data.letra_detectada || 'Ninguna';
+                respuestaSpan.innerText = data.respuesta || 'N/A';
+            }
+
+            function iniciarProcesamiento(video) {
+                setInterval(() => {
+                    if (cameraStream) {
+                        enviarFrame(video);
+                    }
+                }, 1000); // Enviar un frame cada segundo
             }
         });
-
-        // Detecta cuando la página regresa desde el historial del navegador
-        window.addEventListener('pageshow', (event) => {
-            if (event.persisted) {
-                location.reload(); // Recarga la página si se regresa desde el historial
-            }
-        });
-
-     navigator.mediaDevices.getUserMedia({ video: true })
-    .then(function (stream) {
-        const video = document.getElementById('camera-feed');
-        video.srcObject = stream;
-        video.play();
-    })
-    .catch(function (err) {
-        console.error("Error al acceder a la cámara: ", err);
-    });
     </script>
+
+    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
