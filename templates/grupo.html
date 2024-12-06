@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentación grupal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='equipo.png') }}" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background-image: url('{{ url_for("static", filename="img/fondo.png") }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            opacity: 5;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'header.html' %}
+    <div class="container my-4">
+        <h1>
+            <center>Presentación.
+        </h1>
+        <hr>
+        <div class="container">
+            <h2>Integrantes:</h2>
+            <ul>
+                <li>William Josue Guandique Rivera.</li>
+                <li>William Alfredo Irula Gonzales.</li>
+                <li>Emerson Aldahir Portillo Segovia.</li>
+                <li>Briseily Yamileth Solorzano Hernandez.</li>
+                <li>Javier Alexander Vargas Díaz.</li>
+            </ul>
+            <hr>
+            <h4>Descripcion del proyecto:</h4>
+            <p>El proyecto consiste en una aplicación web interactiva que tiene como objetivo principal enseñar
+                y reforzar el aprendizaje de la lengua de señas salvadoreña (LESSA). Este proyecto incluye diversas
+                secciones que permiten a los usuarios explorar y practicar señas a través de distintos niveles de
+                dificultad. La aplicación se organiza en las siguientes secciones:
+            </p>
+            <ul>
+                <li>Menú principal:</li>
+                <p> La página principal ofrece opciones como la Presentación Grupal,
+                    donde se muestra información sobre los miembros del equipo de desarrollo,
+                    y una opción de Jugar que introduce al usuario a las actividades de aprendizaje.
+                </p>
+
+                <li>Sección de juego:</li>
+                <p> Dentro de esta sección, los usuarios pueden acceder a subpáginas como:</p>
+                <p>Ver letras: Una página que muestra imágenes demostrativas de las señas para cada vocal,
+                    proporcionando una referencia visual que facilita el aprendizaje.</p>
+                <p>Seleccionar nivel: Permite al usuario elegir entre tres niveles de aprendizaje: Principiante
+                    (centrado en las vocales), Medio (que abarca el abecedario completo), y Avanzado (enfocado en
+                    expresiones).
+                    En esta fase del proyecto, solo el nivel Principiante está funcional, como una muestra del potencial
+                    del sistema.</p>
+                <li>Funcionamiento del juego:</li>
+                <p> En el nivel Principiante, la aplicación da una letra escrita y evalúa la
+                    seña realizada
+                    por el usuario mediante la cámara.</p>
+            </ul>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,221 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 500px; /* Ajusta el ancho máximo de la sección principal */
+    margin: 0 auto;
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.main-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 5px; /* Aumenta el padding para agrandar la tarjeta */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 320px; /* Aumenta el ancho máximo para hacer la tarjeta más grande */
+    margin: 0 auto;
+}
+
+.letter-display {
+    font-size: 4em; /* Ajusta el tamaño de la letra principal */
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    width: 100%;
+}
+
+.sign-display {
+    width: 240px; /* Ajusta el ancho de la sección de la imagen */
+    height: 390px; /* Ajusta la altura de la sección de la imagen */
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.sign-display img {
+    max-width: 125%;
+    max-height: 125%;
+    object-fit: contain;
+}
+
+.navigation {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.nav-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.nav-button:hover {
+    background-color: #0056b3;
+}
+
+.nav-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Ajustes para mostrar las letras en filas de tres */
+.alphabet-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* Muestra tres letras por fila */
+    gap: 15px; /* Ajusta el espacio entre las letras */
+    margin-bottom: 20px;
+}
+
+.letter-button {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 5px; /* Aumenta el padding para hacer los botones de letras más grandes */
+    font-size: 2em; /* Aumenta el tamaño de la letra en los botones */
+    cursor: pointer;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.letter-button:hover, .letter-button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 500px; /* Ajusta el ancho máximo de la sección principal */
+    margin: 0 auto;
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.main-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 5px; /* Aumenta el padding para agrandar la tarjeta */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 320px; /* Aumenta el ancho máximo para hacer la tarjeta más grande */
+    margin: 0 auto;
+}
+
+.letter-display {
+    font-size: 4em; /* Ajusta el tamaño de la letra principal */
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    width: 100%;
+}
+
+.sign-display {
+    width: 240px; /* Ajusta el ancho de la sección de la imagen */
+    height: 390px; /* Ajusta la altura de la sección de la imagen */
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.sign-display img {
+    max-width: 125%;
+    max-height: 125%;
+    object-fit: contain;
+}
+
+.navigation {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.nav-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.nav-button:hover {
+    background-color: #0056b3;
+}
+
+.nav-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Ajustes para mostrar las letras en filas de tres */
+.alphabet-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* Muestra tres letras por fila */
+    gap: 15px; /* Ajusta el espacio entre las letras */
+    margin-bottom: 20px;
+}
+
+.letter-button {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 5px; /* Aumenta el padding para hacer los botones de letras más grandes */
+    font-size: 2em; /* Aumenta el tamaño de la letra en los botones */
+    cursor: pointer;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.letter-button:hover, .letter-button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+
+
+@media (max-width: 768px) {
+    .main-card {
+        flex-direction: column;
+        max-width: 90%;
+    }
+    .sign-display {
+        margin-top: 10px;
+    }
+}

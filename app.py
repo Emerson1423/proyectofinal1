@@ -11,7 +11,6 @@ app.config['DEBUG'] = True
 camara = None
 camera_active = False
 
-
 camara_lock = Lock()
 
 def GenerarFrame():
@@ -67,7 +66,6 @@ def toggle_camera_off():
         print("Cámara apagada automáticamente al salir de la página")
     return jsonify({"camera_active": camera_active})
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -111,8 +109,6 @@ def pag6():
 @app.route('/nivelAvan')
 def pag7():
     return render_template('nivelAvan.html')
-
-
 
 @app.route('/get_result')
 def get_result():
