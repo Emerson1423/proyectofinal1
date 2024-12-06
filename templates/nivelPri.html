@@ -175,6 +175,16 @@
                 location.reload(); // Recarga la página si se regresa desde el historial
             }
         });
+
+     navigator.mediaDevices.getUserMedia({ video: true })
+    .then(function (stream) {
+        const video = document.getElementById('camera-feed');
+        video.srcObject = stream;
+        video.play();
+    })
+    .catch(function (err) {
+        console.error("Error al acceder a la cámara: ", err);
+    });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
