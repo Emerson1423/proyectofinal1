@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nivel Avanzado</title>
+    <link rel="icon" href="{{ url_for('static', filename='icono_lv3.png') }}" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+        #video-container img {
+            width: 100%; /* Ocupar el ancho completo del contenedor */
+            height: auto; /* Mantener la proporción */
+            border: 1px solid black;
+        }
+
+        @media (max-width: 576px) {
+            span {
+                font-size: 1.8em; /* Ajustar el tamaño del título en móviles */
+            }
+
+            .alert {
+                font-size: 0.9em; /* Reducir el tamaño del texto dentro de la alerta */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'header.html' %}
+    <div class="container px-3 py-4">
+        <center>
+            <span class="d-block text-primary">¡Gestos!</span>
+            <hr class="my-4">
+            <div class="alert alert-primary text-center" role="alert">
+                Haz click en el botón <strong>Iniciar</strong> para que la cámara lea tu seña.
+            </div>
+            <p class="fs-5">Propuesta de implementación.</p>
+
+            <div id="video-container" class="mt-4" style="display: none;">
+                <img id="camera-feed" src="" alt="Cámara no disponible" />
+            </div>
+
+            <!-- Botón de alternar cámara -->
+            <button id="camera-toggle" class="btn btn-success mt-3" onclick="toggleCamera()">Iniciar</button>
+        </center>
+    </div>
+
+    {% include 'footer.html' %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const videoContainer = document.getElementById('video-container');
+            const cameraFeed = document.getElementById('camera-feed');
+            const button = document.getElementById('camera-toggle');
+
+            // Verifica si la cámara está activa al cargar la página
+            const cameraState = sessionStorage.getItem('cameraState'); // Leemos el estado desde sessionStorage
+
+            if (cameraState === 'active') {
+                // Si la cámara estaba activada, muestra el video y ajusta el botón
+                cameraFeed.src = '/video';
+                button.className = 'btn btn-danger';
+                button.innerText = 'Cerrar';
+                videoContainer.style.display = 'block'; // Muestra el contenedor de video
+            } else {
+                // Si la cámara estaba desactivada o no hay estado guardado
+                cameraFeed.src = '';
+                button.className = 'btn btn-success';
+                button.innerText = 'Iniciar';
+                videoContainer.style.display = 'none'; // Oculta el contenedor de video
+            }
+        });
+
+        async function toggleCamera() {
+            const button = document.getElementById('camera-toggle');
+            const cameraFeed = document.getElementById('camera-feed');
+            const videoContainer = document.getElementById('video-container');
+            button.disabled = true;
+
+            try {
+                const response = await fetch('/toggle_camera', { method: 'POST' });
+                const data = await response.json();
+
+                if (data.camera_active) {
+                    // Cámara activada
+                    cameraFeed.src = '/video'; // Establece la fuente del video
+                    button.className = 'btn btn-danger';
+                    button.innerText = 'Cerrar';
+                    videoContainer.style.display = 'block'; // Muestra el contenedor de video
+                    sessionStorage.setItem('cameraState', 'active'); // Guarda el estado de la cámara
+                } else {
+                    // Cámara desactivada
+                    cameraFeed.src = ''; // No muestra la imagen
+                    button.className = 'btn btn-success';
+                    button.innerText = 'Iniciar';
+                    videoContainer.style.display = 'none'; // Oculta el contenedor de video
+                    sessionStorage.removeItem('cameraState'); // Elimina el estado de la cámara
+                }
+            } catch (error) {
+                console.error("Error al alternar la cámara:", error);
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        // Evento para apagar la cámara al salir de la página
+        window.addEventListener('beforeunload', async () => {
+            try {
+                await fetch('/toggle_camera_off', { method: 'POST' });
+                sessionStorage.removeItem('cameraState'); // Elimina el estado de la cámara al salir
+            } catch (error) {
+                console.error("Error al apagar la cámara automáticamente:", error);
+            }
+        });
+
+        // Detecta cuando la página regresa desde el historial del navegador
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) {
+                location.reload(); // Recarga la página si se regresa desde el historial
+            }
+        });
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+
+</html>
